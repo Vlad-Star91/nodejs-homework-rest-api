@@ -11,14 +11,14 @@ const {
 } = require("../../controllers/contacts");
 
 const { Contact, schemas } = require("../../models/contacts");
-
+const { authenticate } = require("../../middlewares/index.js");
 const router = express.Router();
 
-router.get("/", getContactsController);
+router.get("/", authenticate, getContactsController);
 
 router.get("/:id", getContactByIdController);
 
-router.post("/", postContactController);
+router.post("/", authenticate, postContactController);
 
 router.delete("/:contactId", deleteContactController);
 
