@@ -2,6 +2,7 @@ const express = require("express");
 const createError = require("http-errors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const gravatar = require("gravatar");
 
 const { User, schemas } = require("../../models/user");
 
@@ -21,8 +22,10 @@ router.post("/register", async (req, res, next) => {
     }
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(password, salt);
+    const avatarURL = gravatar.url(email);
     await User.create({
       email,
+      avatarURL,
       password: hashPassword,
     });
     res.status(201).json({
@@ -34,7 +37,6 @@ router.post("/register", async (req, res, next) => {
     next(error);
   }
 });
-
 
 router.post("/login", async (req, res, next) => {
   try {
